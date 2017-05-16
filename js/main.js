@@ -1,7 +1,7 @@
 var Narnia = {};
 
 (function (cartola) {
-
+console.log('ok');
     var qtdeTimesProcessados = 0;
     var finalizouProcessamento = false;
 
