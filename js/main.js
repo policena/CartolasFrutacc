@@ -5,7 +5,8 @@ var Narnia = {};
     var qtdeTimesProcessados = 0;
     var finalizouProcessamento = false;
 
-    var times = ['perebas-forever', 'narnia-de-munique', 'sao-bacon-fc', 'goblins-team', 'boletos-fc', 'petrinhus-fc', 'xutebol-club', 'nunes-10'];
+    var times = ['traga-cafe', 'pro-palestra', 'enter-di-melao-f-c', 'evolust-fc', 'sinergia-contabilidade', 'boston-colossenses', 'melanfutclube-fc', 'i-b-a-futebol-clube', 'igor-victorr', 'moisesfcfernando'];
+ +    var qtdeTimesProcessados = 0;
     var atletas_pontuados = [];
     var total_pontos = 0.00;
 
@@ -79,6 +80,7 @@ var Narnia = {};
     }
 
     function quem_paga() {
+        return null;
         var menorObj = $('.pontoparcial').first();
         var menorValor = parseFloat($('.pontoparcial').first().text());
         $('.pontoparcial').each(function (i, obj) {
