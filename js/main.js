@@ -2,95 +2,30 @@ var Narnia = {};
 
 (function (cartola) {
 
-    var timesProcessados = 0;
-    var processado = false;
-    var times = ['traga-cafe', 'pro-palestra', 'enter-di-melao-f-c', 'evolust-fc', 'sinergia-contabilidade', 'boston-colossenses', 'melanfutclube-fc', 'i-b-a-futebol-clube', 'igor-victorr', 'moisesfcfernando'];
+    var qtdeTimesProcessados = 0;
+    var finalizouProcessamento = false;
+
+    var times = ['perebas-forever', 'narnia-de-munique', 'sao-bacon-fc', 'goblins-team', 'boletos-fc', 'petrinhus-fc', 'xutebol-club', 'nunes-10'];
     var atletas_pontuados = [];
     var total_pontos = 0.00;
-    var classeOrdenacao = '.pontoparcial';
-    var mercadoFechado = true;
-    
-    function get_clube(clube_id){
-        switch(clube_id){
-            case 262: return 'Flamengo';
-            case 263: return 'Botafogo';
-            case 264: return 'Corinthians'; 
-            case 266: return 'Fluminense';
-            case 275: return 'Palmeiras';
-            case 276: return 'Sao Paulo';
-            case 277: return 'Santos';                                
-            case 282: return 'Atletico-MG';                    
-            case 283: return 'Cruzeiro';                                
-            case 284: return 'Gremio';                                
-            case 285: return 'Internacional';  
-            case 287: return 'Vitoria';                                
-            case 292: return 'Sport';                                
-            case 293: return 'Atletico-PR';                                
-            case 294: return 'Coritiba';                                
-            case 303: return 'Ponte Preta';                                
-            case 315: return 'Chapecoense';
-            case 316: return 'Figueirense';   
-            case 327: return 'America-MG';                                
-            case 344: return 'Santa Cruz';                                
-        }
-    }
-    
-    function get_pontuacao_rodada(nome_time, handleData) {
-        $.ajax({
-            type: "GET",
-            contentType: "application/json",
-            cache: false,
-            url: "load-api.php",
-            data: {
-                api: "busca-time",
-                team_slug: nome_time
-            },
-            success: function (data) {
-                handleData(data);
-            }
-        });
-    }
 
-    function get_status_mercado() {
-        $.ajax({
-            type: "GET",
-            contentType: "application/json",
-            cache: false,
-            url: "load-api.php",
-            data: {
-                api: "status-mercado"
-            },
-            success: function (data) {
-                if(data.status_mercado == 'undefined' || data.status_mercado != 2) {
-                    mercadoFechado = false;
-                }
-            }
+    function get_pontuacao_rodada(nome_time, handleData) {
+        $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/time/slug/" + nome_time, function(data){
+            handleData(data);
         });
     }
 
     function get_pontuacao_atletas() {
-        $.ajax({
-            dataType: "json",
-            cache: false,
-            url: "load-api.php",
-            data: {
-                api: "parciais-atletas"
-            },
-            complete: function (data) {
-                if (data && data.responseJSON && data.responseJSON.atletas) {
-                  atletas_pontuados = data.responseJSON.atletas;
-                } else {
-                    $('#info-mercado').html('Tem parcial nao tiozao!');
-                    classeOrdenacao = '.ponto';
-                }
-                for (var i = 0; i < times.length; i++) {
-                    timesProcessados++;
-                    get_pontuacao_rodada(times[i], function (obj) {
-                        montaTime(obj);
-                    });
-                }
+        $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
+            if (data && data.responseJSON && data.responseJSON.atletas) {
+                atletas_pontuados = data.responseJSON.atletas;
+            }
+            for (var i = 0; i < times.length; i++) {
+                qtdeTimesProcessados++;
+                get_pontuacao_rodada(times[i], montaTime);
             }
         });
+
     }
 
     function montaTime(data) {
@@ -99,31 +34,32 @@ var Narnia = {};
 
         var nome = data.time.nome;
         var nome_cartola = data.time.nome_cartola;
-        var pontos = data.pontos.toFixed(2);
+        var pontos = data.pontos ? data.pontos.toFixed(2) : 0;
         var patrimonio = data.patrimonio;
 
-        var atletas_html = createAtletasTimeHtml(data.atletas, data.posicoes);
-        var parcial_rodada = total_pontos.toFixed(2);
-        var slug_time = data.time.slug;
-        var pontos_ordenacao = (total_pontos == 0.00 && !mercadoFechado) ? pontos : total_pontos;
-        var pro = data.time.assinante == true ? '<img src="https://cartolafc.globo.com/dist/0.6.9/img/selo-cartoleiro-pro.svg" class="cartola-pro">' : '';
+        var atletas_html = '';
+        if (typeof atletas_pontuados !== 'undefined')
+            atletas_html = createAtletasTimeHtml(data.atletas);
 
-        $('#narnia-table').append('<tr class="' + slug_time + '" data-row="' + slug_time + '" data-total="' + pontos_ordenacao + '"><td colspan="1"><div class="col-xs-12">' + pro + '<img src="' + imgEscudo + '" style="width: 50px;"><img style="width: 30px;position: absolute;left: 45px;top: 25px;" src="' + imgPerfil + '" class="img-circle"></div></td><td colspan="3"><h3>' + nome + '</h3><p>' + nome_cartola + '</p></td><td colspan="2"><p class="ponto" style="text-align: center">' + pontos + '</p></td><td colspan="2" style="text-align: center"><p class="pontoparcial">' + parcial_rodada + '</p></td><td colspan="2" style="text-align: center;"><p class="patrimonio">' + patrimonio + '</p></td><td colspan="2" style="text-align: center" class="coca"></td></tr>');
+        var parcial_rodada = (typeof atletas_pontuados !== 'undefined') ? total_pontos.toFixed(2) : pontos;
+        var slug_time = data.time.slug;
+
+        $('#narnia-table').append('<tr class="' + slug_time + '" data-row="' + slug_time + '" data-total="' + parcial_rodada + '"><td colspan="1"><div class="col-xs-12"><img src="' + imgEscudo + '" style="width: 50px;"><img style="width: 30px;position: absolute;left: 45px;top: 25px;" src="' + imgPerfil + '" class="img-circle"></div></td><td colspan="3"><h3>' + nome + '</h3><p>' + nome_cartola + '</p></td><td colspan="2"><p class="ponto" style="text-align: center">' + pontos + '</p></td><td colspan="2" style="text-align: center"><p class="pontoparcial">' + parcial_rodada + '</p></td><td colspan="2" style="text-align: center;"><p class="patrimonio">' + patrimonio + '</p></td><td colspan="2" style="text-align: center" class="coca"></td></tr>');
         if (atletas_html != '')
             $('#narnia-table').append('<tr class="' + slug_time + '"	>' + atletas_html + '</tr>');
 
         total_pontos = 0.00;
     }
 
-    function createAtletasTimeHtml(atletas_time, posicoes) {
+    function createAtletasTimeHtml(atletas_time) {
         var atletas = '';
         for (var i = 0; i < atletas_time.length; i++) {
-            atletas += getTemplateAtleta(atletas_time[i], posicoes);
+            atletas += getTemplateAtleta(atletas_time[i]);
         }
         return atletas;
     }
 
-    function getTemplateAtleta(data, posicoes) {
+    function getTemplateAtleta(data) {
         var atletaPontuado = atletas_pontuados[data.atleta_id];
         var pontuacao = 0.00;
 
@@ -134,21 +70,18 @@ var Narnia = {};
 
         var foto = data.foto;
         if (foto == null) foto = '';
-        var posicao = posicoes[data.posicao_id].abreviacao;
-        var clube_id = data.clube_id;
 
         return '<td><div class="col-xs-12">' +
-            '<p style="font-size: small">' + data.apelido + ' (' + posicao + ')' + '</p>' +            
-            '<p style="font-size: small">' + get_clube(clube_id) + '</p>' +
+            '<p style="font-size: small">' + data.apelido + '</p>' +
             '<img style="width: 40px;" src="' + foto.replace("FORMATO", "140x140") + '">' +
-            '<p>' + pontuacao + '<p>' +            
+            '<p>' + pontuacao + '<p>' +
             '</div></td>';
     }
 
     function quem_paga() {
-        var menorObj = $(classeOrdenacao).first();
-        var menorValor = parseFloat($(classeOrdenacao).first().text());
-        $(classeOrdenacao).each(function (i, obj) {
+        var menorObj = $('.pontoparcial').first();
+        var menorValor = parseFloat($('.pontoparcial').first().text());
+        $('.pontoparcial').each(function (i, obj) {
             if (parseFloat($(obj).text()) < menorValor) {
                 menorObj = obj;
                 menorValor = parseFloat($(obj).text());
@@ -157,16 +90,8 @@ var Narnia = {};
 
         var parent = $(menorObj).parent().parent();
         parent.addClass('paga-coca');
-        $.get('http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=coca-cola', function (data) {
-            parent.find('.coca').append('<img src="' + data.data.image_url + '" style="height: 100px;">')
-        });
-    }
-
-    function mito(){
-        var theLegend = $('#narnia-table > tbody > tr')[0];
-        $(theLegend).addClass('mito');
-        $.get('http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=win', function (data) {
-            $(theLegend).find('.coca').append('<img src="' + data.data.image_url + '" style="height: 100px;">')
+        $.get('https://cors-anywhere.herokuapp.com/https://api.riffsy.com/v1/search?tag=coca-cola&key=LIVDSRZULELA', function (data) {
+            parent.find('.coca').append('<img src="' + data.results[Math.floor(Math.random() * 19)].media[0].gif.url + '" style="height: 100px;">')
         });
     }
 
@@ -206,14 +131,13 @@ var Narnia = {};
 
     cartola.initialize = function () {
         $(document).ready(function () {
-            get_status_mercado();
             get_pontuacao_atletas();
         }).ajaxStop(function () {
-            if (!processado && times.length == timesProcessados) {
-                processado = true;
+            if (qtdeTimesProcessados == times.length && !finalizouProcessamento) {
+                finalizouProcessamento = true;
                 quem_paga();
                 ordena();
-                mito();
+
                 $('#narnia-table').show();
                 $('#spinner').hide();
             }
