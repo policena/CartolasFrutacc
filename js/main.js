@@ -5,7 +5,7 @@ console.log('ok');
     var qtdeTimesProcessados = 0;
     var finalizouProcessamento = false;
 
-    var times = ['traga-cafe', 'pro-palestra', 'enter-di-melao-f-c', 'evolust-fc', 'sinergia-contabilidade', 'boston-colossenses', 'melanfutclube-fc', 'i-b-a-futebol-clube', 'igor-victorr', 'moisesfcfernando', 'yes-fcclube'];
+    var times = ['traga-cafe', 'pro-palestra', 'enter-di-melao-f-c', 'evolust-fc', 'sinergia-contabilidade', 'boston-colossenses', 'melanfutclube-fc', 'i-b-a-futebol-clube', 'igor-victorr', 'moisesfcfernando', 'yes-fcclube','guardatodas-esporte-clube'];
     var qtdeTimesProcessados = 0;
     var atletas_pontuados = [];
     var total_pontos = 0.00;
