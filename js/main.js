@@ -15,12 +15,13 @@ console.log('ok');
             handleData(data);
         });
     }
-   function get_do_mês(nome_time, handleData) {
-        $.getJSON("https://cors-anywhere.herokuapp.com/https://cartolafc.globo.com/#/liga/churrascao-dos-cartoleiros-da-frutacc" + nome_time, function(data){
+ 
+    function get_pontuçao_do_mês(nome_time, handleData) {
+        $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/time/slug/" + nome_time, function(data){
             handleData(data);
         });
     }
-
+    
     function get_pontuacao_atletas() {
         $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
             if (data && data.responseJSON && data.responseJSON.atletas) {
