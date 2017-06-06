@@ -16,13 +16,7 @@ console.log('ok');
         });
     }
  
-    function get_pontuçao_do_mês(nome_time, handleData) {
-        $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/time/slug/" + nome_time, function(data){
-            handleData(data);
-        });
-    }
-    
-    function get_pontuacao_atletas() {
+       function get_pontuacao_atletas() {
         $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
             if (data && data.responseJSON && data.responseJSON.atletas) {
                 atletas_pontuados = data.responseJSON.atletas;
