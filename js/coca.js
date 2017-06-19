@@ -14,7 +14,7 @@ var Coca = {};
 		Evolust_FC: [6, 11],
 		moisesfcfernando: [1, 2],
 		igor victorr: [3, 5, 9]
-		Enter di Melão F.C: []
+		Enterdi Melão F.C: []
 	};
 
 	function montaMural() {
