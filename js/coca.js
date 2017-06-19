@@ -6,14 +6,15 @@ var Coca = {};
 
 	//Nome do time com os numeros das rodadas que pagou
 	var timesPagantes = {
-		perebas_forever: [],
-		narnia_de_munique: [],
-		sao_bacon_fc: [7, 8],
-		goblins_team: [5, 10],
-		boletos_fc: [3, 4, 9],
-		petrinhus_fc: [6, 11],
-		xutebol_club: [1, 2],
-		cachaca_s_esporte_clube: []
+		Pró-Palestra: [],
+		Traga Café: [],
+		Boston Colossenses: [7, 8],
+		I.B.A Futebol Clube: [5, 10],
+		Guardatodas Esporte Clube: [3, 4, 9],
+		Evolust_FC: [6, 11],
+		moisesfcfernando: [1, 2],
+		igor victorr: [3, 5, 9]
+		Enter di Melão F.C: []
 	};
 
 	function montaMural() {
@@ -61,30 +62,32 @@ var Coca = {};
 
 	function getNameTime(time) {
 		switch (time) {
-			case "perebas_forever":
-				return decodeURIComponent(escape("Perebas Forever"));
+			case "Pró-Palestra":
+				return decodeURIComponent(escape("Pró-Palestra"));
 				break;
-			case "narnia_de_munique":
-				return decodeURIComponent(escape("Narnia de Munique"));
+			case "Enter di Melão F.C":
+				return decodeURIComponent(escape("Enter di Melão F.C"));
 				break;
-			case "sao_bacon_fc":
-				return decodeURIComponent(escape("Sao Bacon FC"));
+			case "Traga Café":
+				return decodeURIComponent(escape("Traga Café"));
 				break;
-			case "goblins_team":
-				return decodeURIComponent(escape("Goblins Team"));
+			case "Boston Colossenses":
+				return decodeURIComponent(escape("Boston Colossenses"));
 				break;
-			case "boletos_fc":
-				return decodeURIComponent(escape("Boletos FC"));
+			case "I.B.A Futebol Clube":
+				return decodeURIComponent(escape("I.B.A Futebol Clube"));
 				break;
-			case "petrinhus_fc":
-				return decodeURIComponent(escape("Petrinhus FC"));
+			case "Guardatodas Esporte Clube":
+				return decodeURIComponent(escape("Guardatodas Esporte Clube"));
 				break;
-			case "xutebol_club":
-				return decodeURIComponent(escape("Xutebol Club"));
+			case "Evolust_FC":
+				return decodeURIComponent(escape("Evolust_FC"));
 				break;
-			case "cachaca_s_esporte_clube":
-				return decodeURIComponent(escape("Cachacas's Esporte Clube"));
+			case "moisesfcfernando":
+				return decodeURIComponent(escape("moisesfcfernando"));
 				break;
+			case "igor victorr";
+				return decodeURIComponent(escape("igor victorr"));
 		}
 	}
 
